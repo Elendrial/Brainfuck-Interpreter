@@ -5,19 +5,20 @@ import java.util.Scanner;
 
 public class Interpreter {
 
-	public Cell cell;
-	public ArrayList<Integer> loopBeginnings;
-	public Scanner scan;
+	private Cell cell;
+	private  ArrayList<Integer> loopBeginnings;
+	private Scanner scan;
+	public boolean integerValues;
 	
 	public Interpreter() {
-		cell = new Cell(null);
-		loopBeginnings = new ArrayList<Integer>();
+		reset();
 		scan = new Scanner(System.in);
 	}
 	
 	public void reset() {
 		cell = new Cell(null);
 		loopBeginnings = new ArrayList<Integer>();
+		integerValues = false;
 	}
 	
 	public void interpret(String s) {
@@ -42,10 +43,14 @@ public class Interpreter {
 				
 			case '.':
 				System.out.println((char) cell.getValue());
+				if(integerValues) System.out.println("::" + cell.getValue());
 				break;
 			
 			case ',':
-				cell.setValue((byte) scan.nextLine().toCharArray()[0]);
+				System.out.print("> ");
+				char ch = scan.nextLine().toCharArray()[0];
+				cell.setValue((byte) ch);
+				if(integerValues) System.out.println("::" + (int)ch + "\n");
 				break;
 				
 			case '[':

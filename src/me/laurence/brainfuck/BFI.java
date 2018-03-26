@@ -5,18 +5,24 @@ import java.io.FileReader;
 
 public class BFI {
 
+	public static Interpreter i;
+	
 	public static void main(String[] args) {
+		i = new Interpreter();
+		
 		String s = getFilename(args);
 		String f = getBrainfuck(s);
 		
-		new Interpreter().interpret(f);
+		i.interpret(f);
 	}
 	
 	public static String getFilename(String[] args) {
-		if(args.length != 1) {
-			System.err.println("Usage: java -jar BrainFuckInterpreter <filename>");
+		if(args.length < 1) {
+			System.err.println("Usage: java -jar BrainFuckInterpreter <filename> [useIntegerValues]");
 			System.exit(1);
 		}
+		
+		if(args.length == 2) i.integerValues = Boolean.parseBoolean(args[1]);
 		
 		return args[0];
 	}
