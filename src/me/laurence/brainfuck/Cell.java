@@ -26,8 +26,15 @@ public class Cell {
 		return next;
 	}
 	
+	private void setNext(Cell c) {
+		next = c;
+	}
+	
 	public Cell getPrev() {
-		if(prev == null) prev = new Cell(null);
+		if(prev == null) {
+			prev = new Cell(null);
+			prev.setNext(this);
+		}
 		return prev;
 	}
 	
