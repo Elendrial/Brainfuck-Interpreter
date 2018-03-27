@@ -6,7 +6,7 @@ public class Cell {
 	private Cell next;
 	private Cell prev;
 	
-	private byte value;
+	private short value;
 	
 	public Cell(Cell prev) {
 		this.prev = prev;
@@ -15,10 +15,12 @@ public class Cell {
 	
 	public void increment() {
 		value++;
+		value %= 256;
 	}
 	
 	public void decrement() {
 		value--;
+		if(value < 0) value += 256;
 	}
 	
 	public Cell getNext() {
@@ -38,11 +40,11 @@ public class Cell {
 		return prev;
 	}
 	
-	public byte getValue() {
+	public short getValue() {
 		return value;
 	}
 	
-	public void setValue(byte b) {
+	public void setValue(short b) {
 		value = b;
 	}
 }

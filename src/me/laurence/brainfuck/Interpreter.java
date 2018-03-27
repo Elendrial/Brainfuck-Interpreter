@@ -65,7 +65,7 @@ public class Interpreter {
 			case ',':
 				System.out.print("> ");
 				char ch = scan.nextLine().toCharArray()[0];
-				cell.setValue((byte) ch);
+				cell.setValue((short) ch);
 				if(integerValues) System.out.println("::" + (int)ch + "\n");
 				break;
 				
