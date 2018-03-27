@@ -21,7 +21,23 @@ public class Interpreter {
 		integerValues = false;
 	}
 	
+	public boolean isValid(String s) {
+		
+		int bracketCount = 0;
+		for(int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			switch(c) {
+			case '[': bracketCount++; break;
+			case ']': bracketCount--; break;
+			}
+		}
+		
+		return bracketCount == 0;
+	}
+	
 	public void interpret(String s) {
+		if(!isValid(s)) return;
+		
 		for(int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			switch(c) {
@@ -54,7 +70,16 @@ public class Interpreter {
 				break;
 				
 			case '[':
-				loopBeginnings.add(i);
+				if(cell.getValue() != 0)
+					loopBeginnings.add(i);
+				else {
+					int bracketCount = 1;
+					while(bracketCount != 0 || s.charAt(i) != ']') {
+						i++;
+						if(s.charAt(i) == '[') bracketCount++;
+						else if(s.charAt(i) == ']') bracketCount--;
+					}
+				}
 				break;
 				
 			case ']':

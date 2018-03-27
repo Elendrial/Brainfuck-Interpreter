@@ -15,12 +15,10 @@ public class Cell {
 	
 	public void increment() {
 		value++;
-	//	value %= 256;
 	}
 	
 	public void decrement() {
 		value--;
-	//	if(value < 0) value += 256;
 	}
 	
 	public Cell getNext() {
