@@ -10,19 +10,31 @@ public class Interpreter {
 	private String[] language;
 	private Scanner scan;
 	private String unusedString;
+	private long cellSize;
 	private int longestLength;
 	public boolean integerValues;
 	
 	public Interpreter() {
-		this(new String[] {">", "<", "+", "-", ".", ",", "[", "]"});
+		this(256);
 	}
 	
 	public Interpreter(String[] language) {
+		this(256, language);
+	}
+	
+	public Interpreter(long cellSize) {
+		this(cellSize, new String[] {">", "<", "+", "-", ".", ",", "[", "]"});
+	}
+	
+	public Interpreter(long cellSize, String[] language) {
 		checkLanguage(language);
 		this.language = language;
+		this.cellSize = cellSize;
+		
 		reset();
 		scan = new Scanner(System.in);
 	}
+	
 	
 	private void checkLanguage(String[] language) {
 		if(language.length != 8) throw new IllegalArgumentException("Language must have length 8.");
@@ -51,7 +63,7 @@ public class Interpreter {
 	}
 	
 	public void reset() {
-		cell = new Cell(null);
+		cell = new Cell(null, cellSize);
 		loopBeginnings = new ArrayList<Integer>();
 		integerValues = false;
 	}
@@ -75,7 +87,7 @@ public class Interpreter {
 	}
 	
 	public void interpret(String s) {
-		if(!isValid(s)) return;
+		if(!isValid(s)) throw new IllegalArgumentException("Brainfuck is not valid.");
 		
 		String c;
 		for(int i = 0; i < s.length(); i++) {
@@ -88,15 +100,18 @@ public class Interpreter {
 			else if(c.equals(language[3])) cell.decrement();
 			
 			else if(c.equals(language[4])) {
-				System.out.println((char) cell.getValue());
-				if(integerValues) System.out.println("::" + cell.getValue());
+				if(cell.getValue() < 256) {
+					System.out.println((char) cell.getValue());
+					if(integerValues) System.out.println("::" + cell.getValue());
+				}
+				else System.out.println(cell.getValue());
 			}
 			
 			else if(c.equals(language[5])) {
 				System.out.print("> ");
 				char ch = scan.nextLine().toCharArray()[0];
-				cell.setValue((short) ch);
-				if(integerValues) System.out.println("::" + (int)ch + "\n");
+				cell.setValue((long) ch);
+				if(integerValues) System.out.println("::" + (long)ch + "\n");
 			}
 			
 			else if(c.equals(language[6])) {
@@ -141,6 +156,15 @@ public class Interpreter {
 	public void setLanguage(String[] language) {
 		checkLanguage(language);
 		this.language = language;
+	}
+
+	public long getCellSize() {
+		return cellSize;
+	}
+
+	public void setCellSize(long cellSize) {
+		this.cellSize = cellSize;
+		cell.updateHighestValue(cellSize);
 	}
 	
 }

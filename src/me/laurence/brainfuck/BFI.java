@@ -18,11 +18,12 @@ public class BFI {
 	
 	public static String getFilename(String[] args) {
 		if(args.length < 1) {
-			System.err.println("Usage: java -jar BrainFuckInterpreter <filename> [useIntegerValues]");
+			System.err.println("Usage: java -jar BrainFuckInterpreter <filename> [useIntegerValues] [cellSize]");
 			System.exit(1);
 		}
 		
-		if(args.length == 2) i.integerValues = Boolean.parseBoolean(args[1]);
+		if(args.length >= 2) i.integerValues = Boolean.parseBoolean(args[1]);
+		if(args.length >= 3) if(Long.parseLong(args[2]) > 0) i.setCellSize(Long.parseLong(args[2]));
 		
 		return args[0];
 	}

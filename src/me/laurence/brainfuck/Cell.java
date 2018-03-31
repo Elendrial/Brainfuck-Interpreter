@@ -6,25 +6,27 @@ public class Cell {
 	private Cell next;
 	private Cell prev;
 	
-	private short value;
+	private long value;
+	private long highestValue;
 	
-	public Cell(Cell prev) {
+	protected Cell(Cell prev, long highestValue) {
 		this.prev = prev;
 		value = 0;
+		this.highestValue = highestValue;
 	}
 	
 	public void increment() {
 		value++;
-		value %= 256;
+		value %= highestValue;
 	}
 	
 	public void decrement() {
 		value--;
-		if(value < 0) value += 256;
+		if(value < 0) value += highestValue;
 	}
 	
 	public Cell getNext() {
-		if(next == null) next = new Cell(this);
+		if(next == null) next = new Cell(this, highestValue);
 		return next;
 	}
 	
@@ -34,17 +36,38 @@ public class Cell {
 	
 	public Cell getPrev() {
 		if(prev == null) {
-			prev = new Cell(null);
+			prev = new Cell(null, highestValue);
 			prev.setNext(this);
 		}
 		return prev;
 	}
 	
-	public short getValue() {
+	public long getValue() {
 		return value;
 	}
 	
-	public void setValue(short b) {
+	public void setValue(long b) {
 		value = b;
+	}
+	
+	public void updateHighestValue(long newValue) {
+		updateThis(newValue);
+		if(next != null) next.updateNext(newValue);
+		if(prev != null) prev.updatePrev(newValue);
+	}
+	
+	private void updateNext(long newValue) {
+		updateThis(newValue);
+		if(next != null) next.updateNext(newValue);
+	}
+	
+	private void updatePrev(long newValue) {
+		updateThis(newValue);
+		if(prev != null) prev.updatePrev(newValue);
+	}
+	
+	private void updateThis(long newValue) {
+		highestValue = newValue;
+		if(value > highestValue) value %= highestValue;
 	}
 }
